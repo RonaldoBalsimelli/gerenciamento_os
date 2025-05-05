@@ -1,0 +1,36 @@
+<h1>Novo Técnico</h1>
+
+<%= form_with model: @tecnico, url: admin_tecnicos_path, method: :post do |form| %>
+  <% if @tecnico.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tecnico.errors.count, "erro") %> impediram que este técnico fosse salvo:</h2>
+
+      <ul>
+        <% @tecnico.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nome %><br>
+    <%= form.text_field :nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contato %><br>
+    <%= form.text_field :contato %>
+  </div>
+
+  <div class="field">
+    <%= form.label :especialidade %><br>
+    <%= form.text_field :especialidade %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Criar Técnico" %>
+  </div>
+<% end %>
+
+<%= link_to 'Voltar', admin_tecnicos_path %>

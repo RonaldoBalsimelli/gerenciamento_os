@@ -1,0 +1,20 @@
+<h1>Detalhes do Técnico</h1>
+
+    <p>
+      <strong>Nome:</strong>
+      <%= @tecnico.nome %>
+    </p>
+    
+    <p>
+      <strong>Contato:</strong>
+      <%= @tecnico.contato %>
+    </p>
+    
+    <p>
+      <strong>Especialidade:</strong>
+      <%= @tecnico.especialidade %>
+    </p>
+    
+    <%= link_to 'Editar', edit_admin_tecnico_path(@tecnico) %> |
+    <%= link_to 'Voltar', admin_tecnicos_path %>
+    

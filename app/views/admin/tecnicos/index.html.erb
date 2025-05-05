@@ -1,0 +1,27 @@
+<h1>Técnicos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Contato</th>
+      <th>Especialidade</th>
+      <th colspan="3">Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tecnicos.each do |tecnico| %>
+      <tr>
+        <td><%= tecnico.nome %></td>
+        <td><%= tecnico.contato %></td>
+        <td><%= tecnico.especialidade %></td>
+        <td><%= link_to 'Mostrar', admin_tecnico_path(tecnico) %></td>
+        <td><%= link_to 'Editar', edit_admin_tecnico_path(tecnico) %></td>
+        <td><%= link_to 'Excluir', admin_tecnico_path(tecnico), method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Novo Técnico', new_admin_tecnico_path %>

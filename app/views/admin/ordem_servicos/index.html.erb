@@ -1,0 +1,46 @@
+<h1>Ordens de Serviço</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Cliente</th>
+      <th>Técnico</th>
+      <th>Descrição do Problema</th>
+      <th>Equipamento</th>
+      <th>Data de Início</th>
+      <th>Data de Fim</th>
+      <th>Assinatura do Cliente</th>
+      <th>Status</th>
+      <th>Latitude Início</th>
+      <th>Longitude Início</th>
+       <th>Latitude Fim</th>
+      <th>Longitude Fim</th>
+      <th colspan="3">Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ordem_servicos.each do |ordem_servico| %>
+      <tr>
+        <td><%= ordem_servico.cliente.nome %></td>
+        <td><%= ordem_servico.tecnico.nome %></td>
+        <td><%= ordem_servico.descricao_problema %></td>
+        <td><%= ordem_servico.equipamento %></td>
+        <td><%= ordem_servico.data_inicio %></td>
+        <td><%= ordem_servico.data_fim %></td>
+        <td><%= ordem_servico.assinatura_cliente %></td>
+        <td><%= ordem_servico.status %></td>
+         <td><%= ordem_servico.latitude_inicio %></td>
+          <td><%= ordem_servico.longitude_inicio %></td>
+        <td><%= ordem_servico.latitude_fim %></td>
+        <td><%= ordem_servico.longitude_fim %></td>
+        <td><%= link_to 'Mostrar', admin_ordem_servico_path(ordem_servico) %></td>
+        <td><%= link_to 'Editar', edit_admin_ordem_servico_path(ordem_servico) %></td>
+        <td><%= link_to 'Excluir', admin_ordem_servico_path(ordem_servico), method: :delete, data: { confirm: 'Tem certeza?' } %></td>
+         <td><%= link_to 'Validar', validar_admin_ordem_servico_path(ordem_servico), method: :patch %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Nova Ordem de Serviço', new_admin_ordem_servico_path %>

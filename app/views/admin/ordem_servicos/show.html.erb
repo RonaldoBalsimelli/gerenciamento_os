@@ -1,0 +1,63 @@
+<h1>Detalhes da Ordem de Serviço</h1>
+
+<p>
+  <strong>Cliente:</strong>
+  <%= @ordem_servico.cliente.nome %>
+</p>
+
+<p>
+  <strong>Técnico:</strong>
+  <%= @ordem_servico.tecnico.nome %>
+</p>
+
+<p>
+  <strong>Descrição do Problema:</strong>
+  <%= @ordem_servico.descricao_problema %>
+</p>
+
+<p>
+  <strong>Equipamento:</strong>
+  <%= @ordem_servico.equipamento %>
+</p>
+
+<p>
+  <strong>Data de Início:</strong>
+  <%= @ordem_servico.data_inicio %>
+</p>
+
+<p>
+  <strong>Data de Fim:</strong>
+  <%= @ordem_servico.data_fim %>
+</p>
+
+<p>
+  <strong>Assinatura do Cliente:</strong>
+  <%= @ordem_servico.assinatura_cliente %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @ordem_servico.status %>
+</p>
+<p>
+  <strong>Latitude Início:</strong>
+  <%= @ordem_servico.latitude_inicio %>
+</p>
+
+<p>
+  <strong>Longitude Início:</strong>
+  <%= @ordem_servico.longitude_inicio %>
+</p>
+
+<p>
+  <strong>Latitude Fim:</strong>
+  <%= @ordem_servico.latitude_fim %>
+</p>
+
+<p>
+  <strong>Longitude Fim:</strong>
+  <%= @ordem_servico.longitude_fim %>
+</p>
+
+<%= link_to 'Editar', edit_admin_ordem_servico_path(@ordem_servico) %> |
+<%= link_to 'Voltar', admin_ordem_servicos_path %>

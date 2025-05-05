@@ -1,0 +1,36 @@
+<h1>Novo Cliente</h1>
+
+<%= form_with model: @cliente, url: admin_clientes_path, method: :post do |form| %>
+  <% if @cliente.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cliente.errors.count, "erro") %> impediram que este cliente fosse salvo:</h2>
+
+      <ul>
+        <% @cliente.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nome %><br>
+    <%= form.text_field :nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contato %><br>
+    <%= form.text_field :contato %>
+  </div>
+
+  <div class="field">
+    <%= form.label :endereco %><br>
+    <%= form.text_area :endereco %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Criar Cliente" %>
+  </div>
+<% end %>
+
+<%= link_to 'Voltar', admin_clientes_path %>

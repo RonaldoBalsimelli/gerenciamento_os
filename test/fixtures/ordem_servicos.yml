@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente: one
+  tecnico: one
+  descricao_problema: MyText
+  equipamento: MyString
+  data_inicio: 2025-05-05 15:15:15
+  data_fim: 2025-05-05 15:15:15
+  assinatura_cliente: MyText
+  status: MyString
+  latitude_inicio: 9.99
+  latitude_fim: 9.99
+  longitude_inicio: 9.99
+  longitude_fim: 9.99
+
+two:
+  cliente: two
+  tecnico: two
+  descricao_problema: MyText
+  equipamento: MyString
+  data_inicio: 2025-05-05 15:15:15
+  data_fim: 2025-05-05 15:15:15
+  assinatura_cliente: MyText
+  status: MyString
+  latitude_inicio: 9.99
+  latitude_fim: 9.99
+  longitude_inicio: 9.99
+  longitude_fim: 9.99
