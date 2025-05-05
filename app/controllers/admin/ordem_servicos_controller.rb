@@ -7,6 +7,7 @@ class Admin::OrdemServicosController < ApplicationController
     @ordem_servico = OrdemServico.new
     @clientes = Cliente.all
     @tecnicos = Tecnico.all
+    @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
   end
 
   def create
@@ -16,7 +17,8 @@ class Admin::OrdemServicosController < ApplicationController
     else
       @clientes = Cliente.all
       @tecnicos = Tecnico.all
-      flash.now[:alert] = 'Erro ao criar ordem de serviço.' # Mantém a mensagem na mesma página
+      @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
+      flash.now[:alert] = 'Erro ao criar ordem de serviço.'
       render :new, status: :unprocessable_entity
     end
   end
@@ -25,6 +27,7 @@ class Admin::OrdemServicosController < ApplicationController
     @ordem_servico = OrdemServico.find(params[:id])
     @clientes = Cliente.all
     @tecnicos = Tecnico.all
+    @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
   end
 
   def update
@@ -34,7 +37,8 @@ class Admin::OrdemServicosController < ApplicationController
     else
       @clientes = Cliente.all
       @tecnicos = Tecnico.all
-      flash.now[:alert] = 'Erro ao atualizar ordem de serviço.' # Mantém a mensagem na mesma página
+      @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
+      flash.now[:alert] = 'Erro ao atualizar ordem de serviço.'
       render :edit, status: :unprocessable_entity
     end
   end
@@ -47,11 +51,13 @@ class Admin::OrdemServicosController < ApplicationController
 
   def validar
     @ordem_servico = OrdemServico.find(params[:id])
-    novo_status = params[:status] # Pega o status enviado pelo formulário
-    if @ordem_servico.update(status: novo_status)
+     novo_status = params[:status]
+
+    if ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno'].include?(novo_status)
+      @ordem_servico.update(status: novo_status)
       redirect_to admin_ordem_servicos_path, notice: "Ordem de serviço marcada como #{novo_status}."
     else
-      redirect_to admin_ordem_servicos_path, alert: 'Erro ao alterar o status da ordem de serviço.'
+      redirect_to admin_ordem_servicos_path, alert: 'Status de validação inválido.'
     end
   end
 

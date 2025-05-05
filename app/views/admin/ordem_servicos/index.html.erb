@@ -13,12 +13,10 @@
       <th>Status</th>
       <th>Latitude Início</th>
       <th>Longitude Início</th>
-       <th>Latitude Fim</th>
+      <th>Latitude Fim</th>
       <th>Longitude Fim</th>
-      <th colspan="3">Ações</th>
-    </tr>
+      <th colspan="4">Ações</th> </tr>
   </thead>
-
   <tbody>
     <% @ordem_servicos.each do |ordem_servico| %>
       <tr>
@@ -30,14 +28,19 @@
         <td><%= ordem_servico.data_fim %></td>
         <td><%= ordem_servico.assinatura_cliente %></td>
         <td><%= ordem_servico.status %></td>
-         <td><%= ordem_servico.latitude_inicio %></td>
-          <td><%= ordem_servico.longitude_inicio %></td>
+        <td><%= ordem_servico.latitude_inicio %></td>
+        <td><%= ordem_servico.longitude_inicio %></td>
         <td><%= ordem_servico.latitude_fim %></td>
         <td><%= ordem_servico.longitude_fim %></td>
         <td><%= link_to 'Mostrar', admin_ordem_servico_path(ordem_servico) %></td>
         <td><%= link_to 'Editar', edit_admin_ordem_servico_path(ordem_servico) %></td>
         <td><%= link_to 'Excluir', admin_ordem_servico_path(ordem_servico), method: :delete, data: { confirm: 'Tem certeza?' } %></td>
-         <td><%= link_to 'Validar', validar_admin_ordem_servico_path(ordem_servico), method: :patch %></td>
+        <td>
+          <%= form_with url: validar_admin_ordem_servico_path(ordem_servico), method: :patch do |form| %>
+            <%= form.select :status, ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno'], prompt: "Alterar Status" %>
+            <%= form.submit "Salvar", class: 'btn btn-sm btn-primary' %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

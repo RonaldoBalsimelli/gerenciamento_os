@@ -4,7 +4,6 @@
   <% if @ordem_servico.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@ordem_servico.errors.count, "erro") %> impediram que esta ordem de serviço fosse salva:</h2>
-
       <ul>
         <% @ordem_servico.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -47,12 +46,10 @@
     <%= form.label :assinatura_cliente, "Assinatura do Cliente" %><br>
     <%= form.text_field :assinatura_cliente %>
   </div>
-
   <div class="field">
     <%= form.label :status, "Status" %><br>
-    <%= form.select :status, ['aberta', 'em andamento', 'aguardando_aprovacao', 'concluída'], selected: @ordem_servico.status, prompt: "Selecione o Status" %>
+    <%= form.select :status, @status_options, selected: @ordem_servico.status, prompt: "Selecione o Status" %>
   </div>
-
   <div class="field">
     <%= form.label :latitude_inicio, "Latitude Início" %><br>
     <%= form.text_field :latitude_inicio %>
