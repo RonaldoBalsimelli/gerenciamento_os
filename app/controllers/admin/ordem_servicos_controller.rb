@@ -5,8 +5,8 @@ class Admin::OrdemServicosController < ApplicationController
 
   def new
     @ordem_servico = OrdemServico.new
-    @clientes = Cliente.all # Para exibir a lista de clientes no formulário
-    @tecnicos = Tecnico.all # Para exibir a lista de técnicos no formulário
+    @clientes = Cliente.all
+    @tecnicos = Tecnico.all
   end
 
   def create
@@ -16,14 +16,15 @@ class Admin::OrdemServicosController < ApplicationController
     else
       @clientes = Cliente.all
       @tecnicos = Tecnico.all
+      flash.now[:alert] = 'Erro ao criar ordem de serviço.' # Mantém a mensagem na mesma página
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     @ordem_servico = OrdemServico.find(params[:id])
-    @clientes = Cliente.all # Para exibir a lista de clientes no formulário
-    @tecnicos = Tecnico.all # Para exibir a lista de técnicos no formulário
+    @clientes = Cliente.all
+    @tecnicos = Tecnico.all
   end
 
   def update
@@ -33,6 +34,7 @@ class Admin::OrdemServicosController < ApplicationController
     else
       @clientes = Cliente.all
       @tecnicos = Tecnico.all
+      flash.now[:alert] = 'Erro ao atualizar ordem de serviço.' # Mantém a mensagem na mesma página
       render :edit, status: :unprocessable_entity
     end
   end
@@ -45,8 +47,12 @@ class Admin::OrdemServicosController < ApplicationController
 
   def validar
     @ordem_servico = OrdemServico.find(params[:id])
-    @ordem_servico.update(status: 'aguardando_aprovacao') # Ou 'concluída', dependendo do seu fluxo
-    redirect_to admin_ordem_servicos_path, notice: 'Ordem de serviço marcada para validação.'
+    novo_status = params[:status] # Pega o status enviado pelo formulário
+    if @ordem_servico.update(status: novo_status)
+      redirect_to admin_ordem_servicos_path, notice: "Ordem de serviço marcada como #{novo_status}."
+    else
+      redirect_to admin_ordem_servicos_path, alert: 'Erro ao alterar o status da ordem de serviço.'
+    end
   end
 
   private
