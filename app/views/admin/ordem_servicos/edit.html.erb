@@ -1,78 +1,37 @@
-<h1>Editar Ordem de Serviço</h1>
+<div class="field">
+  <label for="assinatura_cliente">Assinatura do Cliente</label><br>
+  <canvas id="assinaturaCanvas" width="300" height="100" style="border:1px solid #000;"></canvas>
+  <input type="hidden" name="ordem_servico[assinatura_cliente]" id="assinaturaInput">
+  <button type="button" id="limparAssinatura">Limpar Assinatura</button>
+</div>
+<script>
+  const canvas = document.getElementById('assinaturaCanvas');
+  const ctx = canvas.getContext('2d');
+  let isDrawing = false;
 
-<%= form_with model: @ordem_servico, url: admin_ordem_servico_path(@ordem_servico), method: :patch do |form| %>
-  <% if @ordem_servico.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@ordem_servico.errors.count, "erro") %> impediram que esta ordem de serviço fosse salva:</h2>
-      <ul>
-        <% @ordem_servico.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+  });
 
-  <div class="field">
-    <%= form.label :cliente_id, "Cliente" %><br>
-    <%= form.select :cliente_id, options_from_collection_for_select(@clientes, :id, :nome), selected: @ordem_servico.cliente_id, prompt: "Selecione um Cliente" %>
-  </div>
+  canvas.addEventListener('mousemove', (e) => {
+    if (isDrawing) {
+      ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  });
 
-  <div class="field">
-    <%= form.label :tecnico_id, "Técnico" %><br>
-    <%= form.select :tecnico_id, options_from_collection_for_select(@tecnicos, :id, :nome), selected: @ordem_servico.tecnico_id, prompt: "Selecione um Técnico" %>
-  </div>
+  canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+    ctx.closePath();
+    document.getElementById('assinaturaInput').value = canvas.toDataURL(); // Salvar como Base64
+  });
 
-  <div class="field">
-    <%= form.label :descricao_problema, "Descrição do Problema" %><br>
-    <%= form.text_area :descricao_problema %>
-  </div>
-
-  <div class="field">
-    <%= form.label :equipamento, "Equipamento" %><br>
-    <%= form.text_field :equipamento %>
-  </div>
-
-  <div class="field">
-    <%= form.label :data_inicio, "Data de Início" %><br>
-    <%= form.datetime_field :data_inicio %>
-  </div>
-
-  <div class="field">
-    <%= form.label :data_fim, "Data de Fim" %><br>
-    <%= form.datetime_field :data_fim %>
-  </div>
-
-  <div class="field">
-    <%= form.label :assinatura_cliente, "Assinatura do Cliente" %><br>
-    <%= form.text_field :assinatura_cliente %>
-  </div>
-  <div class="field">
-    <%= form.label :status, "Status" %><br>
-    <%= form.select :status, @status_options, selected: @ordem_servico.status, prompt: "Selecione o Status" %>
-  </div>
-  <div class="field">
-    <%= form.label :latitude_inicio, "Latitude Início" %><br>
-    <%= form.text_field :latitude_inicio %>
-  </div>
-
-  <div class="field">
-    <%= form.label :longitude_inicio, "Longitude Início" %><br>
-    <%= form.text_field :longitude_inicio %>
-  </div>
-
-  <div class="field">
-    <%= form.label :latitude_fim, "Latitude Fim" %><br>
-    <%= form.text_field :latitude_fim %>
-  </div>
-
-  <div class="field">
-    <%= form.label :longitude_fim, "Longitude Fim" %><br>
-    <%= form.text_field :longitude_fim %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Salvar Alterações" %>
-  </div>
-<% end %>
-
-<%= link_to 'Voltar', admin_ordem_servicos_path %>
+  document.getElementById('limparAssinatura').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById('assinaturaInput').value = '';
+  });
+</script>

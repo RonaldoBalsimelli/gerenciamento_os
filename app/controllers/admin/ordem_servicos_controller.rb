@@ -1,65 +1,39 @@
-class Admin::OrdemServicosController < ApplicationController
-  def index
-    @ordem_servicos = OrdemServico.all
-  end
+require 'rest-client' # Certifique-se de adicionar isso no seu Gemfile e rodar `bundle install`
+require 'json'
 
-  def new
-    @ordem_servico = OrdemServico.new
-    @clientes = Cliente.all
-    @tecnicos = Tecnico.all
-    @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
+class Admin::OrdemServicosController < ApplicationController
+  # Este é um exemplo usando a API Nominatim do OpenStreetMap.
+  def geocode(endereco)
+    # Lógica para chamar a API de geocodificação Nominatim
+    # Retornar um hash com latitude e longitude
+    response = RestClient.get("https://nominatim.openstreetmap.org/search?format=json&q=#{URI.encode_www_form_component(endereco)}")
+    json = JSON.parse(response.body)
+    if json.present? && json.first.present?
+      { latitude: json.first['lat'], longitude: json.first['lon'] }
+    else
+      { latitude: nil, longitude: nil } # Tratar erros
+    end
+  rescue RestClient::Exception => e
+    Rails.logger.error "Geocoding error: #{e.message}"
+    { latitude: nil, longitude: nil }
   end
 
   def create
     @ordem_servico = OrdemServico.new(ordem_servico_params)
+
+    # Obter a geolocalização do endereço do cliente (ou técnico, ou local da OS)
+    endereco = @ordem_servico.cliente.endereco # ou qualquer campo que tenha o endereço
+    geolocalizacao = geocode(endereco)
+    @ordem_servico.latitude_inicio = geolocalizacao[:latitude]
+    @ordem_servico.longitude_inicio = geolocalizacao[:longitude]
+
     if @ordem_servico.save
       redirect_to admin_ordem_servicos_path, notice: 'Ordem de serviço criada com sucesso.'
     else
-      @clientes = Cliente.all
-      @tecnicos = Tecnico.all
-      @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
-      flash.now[:alert] = 'Erro ao criar ordem de serviço.'
-      render :new, status: :unprocessable_entity
+      # ...
     end
   end
-
-  def edit
-    @ordem_servico = OrdemServico.find(params[:id])
-    @clientes = Cliente.all
-    @tecnicos = Tecnico.all
-    @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
-  end
-
-  def update
-    @ordem_servico = OrdemServico.find(params[:id])
-    if @ordem_servico.update(ordem_servico_params)
-      redirect_to admin_ordem_servicos_path, notice: 'Ordem de serviço atualizada com sucesso.'
-    else
-      @clientes = Cliente.all
-      @tecnicos = Tecnico.all
-      @status_options = ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno']
-      flash.now[:alert] = 'Erro ao atualizar ordem de serviço.'
-      render :edit, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @ordem_servico = OrdemServico.find(params[:id])
-    @ordem_servico.destroy
-    redirect_to admin_ordem_servicos_path, notice: 'Ordem de serviço excluída com sucesso.'
-  end
-
-  def validar
-    @ordem_servico = OrdemServico.find(params[:id])
-     novo_status = params[:status]
-
-    if ['Pendente', 'Concluído', 'Necessário Peça', 'Não Concluído', 'Necessário Retorno'].include?(novo_status)
-      @ordem_servico.update(status: novo_status)
-      redirect_to admin_ordem_servicos_path, notice: "Ordem de serviço marcada como #{novo_status}."
-    else
-      redirect_to admin_ordem_servicos_path, alert: 'Status de validação inválido.'
-    end
-  end
+  #...
 
   private
 
